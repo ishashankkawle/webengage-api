@@ -1,4 +1,5 @@
-import httpHandler from "../core/httpHandler.mjs";
+import HttpHandler from "../core/httpHandler.mjs";
+import Util from "../core/utils.mjs";
 import { resources } from "../public/resources.mjs";
 
 class AppInstance
@@ -12,7 +13,8 @@ class AppInstance
             }
             
         AppInstance.instance = this;
-        this.http = new httpHandler();
+        this.util = new Util();
+        this.http = new HttpHandler();
         
     }
 }

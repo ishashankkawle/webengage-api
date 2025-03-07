@@ -50,10 +50,22 @@ app.get('/health', async (req, res) => {
 // REPO DETAIL ROUTES - API
 //--------------------------------------------------------------------
 
-app.get('/repo/v2/branch' , async (req , res) => {
-  try {
-    let customHeader = { "PRIVATE-TOKEN": process.env.GITLAB_TOKEN }
-    res.send(await appInstance.http.httpGet(gitlabBaseUrl + "/repository/branches" , customHeader , false))
+app.get('/generate-csv' , async (req , res) => {
+  try 
+  {
+    let userData = await appInstance.http.httpGet("https://jsonplaceholder.typicode.com/users" , {} , false)
+    let postData = await appInstance.http.httpGet("https://jsonplaceholder.typicode.com/posts" , {} , false)
+    let commentData = await appInstance.http.httpGet("https://jsonplaceholder.typicode.com/comments" , {} , false)
+    userData = userData.map((item) => {return {"id" :item.id , "name" :item.name}})
+    postData = postData.map((item) => {return {"id" :item.id , "title" :item.title}})
+    commentData = commentData.map((item) => {return {"id" :item.id , "body" :item.body}})
+    let output = appInstance.util.mergeArray(userData , postData , "id")
+    output = appInstance.util.mergeArray(output , commentData , "id")
+
+
+    output = appInstance.util.convertJsonToCsv(output , ["id" , "name" , "title" , "body"])
+    res.type('text/csv')
+    res.send(output)
   } catch (error) {
     console.log({message : error.message , stack: error.stack})
   }

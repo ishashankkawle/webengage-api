@@ -1,6 +1,6 @@
 import axios from "axios";
 
-class httpHandler 
+class HttpHandler 
 {
 
     getDefaultHeaders() {
@@ -47,4 +47,4 @@ class httpHandler
     }
 
 }
-export default httpHandler;
+export default HttpHandler;
