@@ -13,4 +13,4 @@
 * Clone the repository on local machine
 * Go inside the cloned folder and run command : `npm i`
 * Once command completed successfully, run command : `npm run dev`
-* Onc executed, api will start listining at default address : `http://localhost:3000`
+* Once executed, api will start listining at default address : `http://localhost:3000`
