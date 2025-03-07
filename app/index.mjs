@@ -53,18 +53,15 @@ app.get('/health', async (req, res) => {
 app.get('/generate-csv' , async (req , res) => {
   try 
   {
-    let userData = await appInstance.http.httpGet("https://jsonplaceholder.typicode.com/users" , {} , false)
-    let postData = await appInstance.http.httpGet("https://jsonplaceholder.typicode.com/posts" , {} , false)
-    let commentData = await appInstance.http.httpGet("https://jsonplaceholder.typicode.com/comments" , {} , false)
-    userData = userData.map((item) => {return {"id" :item.id , "name" :item.name}})
-    postData = postData.map((item) => {return {"id" :item.id , "title" :item.title}})
-    commentData = commentData.map((item) => {return {"id" :item.id , "body" :item.body}})
-    let output = appInstance.util.mergeArray(userData , postData , "id")
-    output = appInstance.util.mergeArray(output , commentData , "id")
-
-
-    output = appInstance.util.convertJsonToCsv(output , ["id" , "name" , "title" , "body"])
-    res.type('text/csv')
+    let output = await appInstance.csvHandler.generateCSV()
+    if(output.successful)
+    {
+      output.message = "New csv file generated successfully" 
+    }
+    else
+    {
+      output.message = "Failed to Generate csv file"
+    }
     res.send(output)
   } catch (error) {
     console.log({message : error.message , stack: error.stack})
@@ -78,7 +75,6 @@ app.get('/generate-csv' , async (req , res) => {
 //--------------------------------------------------------------------
 
 // 404 - Not Found
-
 app.use(function (req, res, next) {
   console.log('Route' + req.url + ' Not found.')
   return res.status(404).send({ message: 'Route' + req.url + ' Not found.' });
